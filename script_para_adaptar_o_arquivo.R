@@ -1,7 +1,7 @@
-setwd("S:\\UFAL\\4° Semestre\\Probabilidade e Estátistica\\atividades\\ab1.1\\data")
+setwd("C:\\Users\\davic\\OneDrive\\Documentos\\R\\data")
 #Colocando o caminho para o arquivo
 
-data2 <- read.csv("filename.csv", head = TRUE, sep=";", dec = ".") #Lendo o arquivo
+data2 <- read.csv("data_RAW.csv", head = TRUE, sep=";", dec = ".") #Lendo o arquivo
 
 #Checagem se esta com o conteudo certo
 colnames(data2)
@@ -9,6 +9,8 @@ ncol(data2)
 nrow(data2)
 
 df <- data.frame(data2) #Criando o DataFrame
+
+df
 
 #Deletando as colunas que não serão usadas
 df$GDP <- NULL
@@ -44,6 +46,14 @@ colnames(df) <- c("Ordem de prioridade do curso", "Curso", "Nota da qualificaç�
 
 colnames(df) #Checando se as colunas estão renomeadas corretamente
 
+ordem_desejada <- c("Curso", "Ordem de prioridade do curso", "Nota da qualificação anterior",
+                    "Nota de admissão", "Deslocado", "Necessidades educacionais especiais", 
+                    "Devedor", "Gênero", "Bolsista", "Idade na inscrição", "Internacional",
+                    "Matérias do 1° semestre aprovadas", "Média das notas do 1° semestre",
+                    "Resultado")
+
+df <- df[, ordem_desejada]
+
 #Trocando certos números para suas respectivas informações
 df$Curso[df$Curso == 33] <- "Biofuel Production Technologies"
 df$Curso[df$Curso == 171] <- "Animation and Multimedia Design"
@@ -63,6 +73,21 @@ df$Curso[df$Curso == 9773] <- "Journalism and Communication"
 df$Curso[df$Curso == 9853] <- "Basic Education"
 df$Curso[df$Curso == 9991] <- "Management (Noturno)"
 
+df$Deslocado[df$Deslocado == 1] <- "Sim"
+df$Deslocado[df$Deslocado == 0] <- "Não"
+
+df$'Necessidades educacionais especiais'[df$'Necessidades educacionais especiais' == 1] <- "Sim"
+df$'Necessidades educacionais especiais'[df$'Necessidades educacionais especiais' == 0] <- "Não"
+
+df$Devedor[df$Devedor == 1] <- "Sim"
+df$Devedor[df$Devedor == 0] <- "Não"
+
+df$Bolsista[df$Bolsista == 1] <- "Sim"
+df$Bolsista[df$Bolsista == 0] <- "Não"
+
+df$Internacional[df$Internacional == 1] <- "Sim"
+df$Internacional[df$Internacional == 0] <- "Não"
+
 df$Gênero[df$Gênero == 1] <- "Homem"
 df$Gênero[df$Gênero == 0] <- "Mulher"
 
@@ -70,4 +95,5 @@ df$Resultado[df$Resultado == "Dropout"] <- "Desistente"
 df$Resultado[df$Resultado == "Graduate"] <- "Graduado"
 df$Resultado[df$Resultado == "Enrolled"] <- "Matriculado"
 
-write.csv(df, "teste.csv", row.names = FALSE) #escrevendo o arquivo novo
+write.csv(df, "data_ADAPTED.csv", row.names = FALSE) #escrevendo o arquivo novo
+
