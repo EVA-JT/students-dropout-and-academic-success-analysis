@@ -1,0 +1,64 @@
+---
+title: "Atividade AB1.1"
+output: html_document
+date: "2025-08-03"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Preparação do script
+
+Importar a base de dados usando a função read.csv.
+
+```{r}
+setwd("C:\\Users\\davic\\OneDrive\\Documentos\\R\\data")
+#Colocando o caminho para o arquivo
+
+df <- read.csv("data_ADAPTED.csv")
+
+```
+ 
+Verificar quantidade de linhas e colunas.
+
+```{r}
+nrow(df)
+ncol(df)
+```
+
+Verificar nomes das colunas.
+
+```{r}
+colnames(df)
+```
+
+Verificar tipo de dados.
+
+```{r}
+class(df$Curso)
+class(df$Ordem.de.prioridade.do.curso)
+class(df$Nota.da.qualificacao.anterior)
+class(df$Nota.de.admissao)
+class(df$Deslocado)
+class(df$Necessidades.educacionais.especiais)
+class(df$Devedor)
+class(df$Genero)
+class(df$Bolsista)
+class(df$Idade.na.inscricao)
+class(df$Internacional)
+class(df$Materias.do.primeiro.semestre.aprovadas)
+class(df$Media.das.notas.do.primeiro.semestre)
+class(df$Resultado)
+```
+
+Identificar valores ausentes
+
+```{r}
+colSums(is.na(df))
+```
+
+
+## 1. Análise exploratória dos dados
+
+
