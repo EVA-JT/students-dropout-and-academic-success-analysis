@@ -67,7 +67,7 @@ colSums(is.na(df))
 Variáveis numéricas contínuas são variáveis quantitativas que podem assumir qualquer valor dentro de um intervalo específico, incluindo valores fracionários ou decimais.
 Na nossa base de dados temos um total de 3 variáveis numéricas contínuas, são elas: 'Nota da qualificacao anterior', 'Nota de adimissao' e 'Media das notas do primeiro semestre'.
 
-Para o prossegimento do item 2, escolhemos a coluna 'Nota de adimissao' para calcular: valor mínimo e o máximo valor, média, mediana, desvio padrão, os quartis, construir o histograma, boxplot e interpretar os resultados.
+Para o prosseguimento do item 2, escolhemos a coluna 'Nota de adimissao' para calcular: valor mínimo e o máximo valor, média, mediana, desvio padrão, os quartis, construir o histograma, boxplot e interpretar os resultados.
 
 ### Valores mínimo e máximo
 
@@ -104,7 +104,7 @@ summary(df$Nota.de.admissao)
 ### Histograma
 
 ```{r}
-hist(df$Nota.de.admissao, main = "Histograma da nota de adimissão", xlab = "Nota de adimissão", ylab = "Frequência", col = "mediumblue", xlim = c(95, 190), ylim = c(0, 900))
+hist(df$Nota.de.admissao, main = "Histograma da nota de adimissão", xlab = "Nota de adimissão", ylab = "Frequência", col = "mediumblue", xlim = c(80, 200), ylim = c(0, 1000))
 abline(v = mean(df$Nota.de.admissao), col = "pink", lwd = 2, lty = 2) # Linha que marca a média
 abline(v = median(df$Nota.de.admissao), col = "purple", lwd = 2, lty = 2) # Linha que marca a mediana
 legend("topright", legend = c("Média", "Mediana"), col = c("pink", "purple"), lwd = 2, lty = c(2, 2))
@@ -122,7 +122,7 @@ A análise bivariada é um método estatístico que examina a relação entre du
 
 A análise bivariada de variáveis categóricas (categórica x categórica) investiga a relação entre duas variáveis que são do tipo categórico, ou seja, cujos valores representam categorias ou grupos distintos. 
 
-Para o prossegimento do item 3, escolhemos as coluna 'Gênero' e 'Resultado' para fazer uma análise bivariada com duas colunas categóricas escolhidas da base de dados,
+Para o prossedimento do item 3, escolhemos as coluna 'Gênero' e 'Resultado' para fazer uma análise bivariada com duas colunas categóricas escolhidas da base de dados,
 fazer gráficos e interpretar os resultados.
 
 ### Tabela de frequencias e por porcentagem de sucesso
@@ -134,8 +134,10 @@ prop_por_genero <- prop.table(tabela, margin = 1)  # margem 1 = por linha (gêne
 round(prop_por_genero, 3) # arredonda o valor para 3 casas
 ```
 
-### Gráfico
+### Gráficos
 ```{r}
+barplot(tabela, col = c("mediumblue", "pink"), main = "Relação entre resultado por quantidade de homens e mulheres", xlab = "Gênero", ylab = "Quantidade", ylim = c(0, 2500))
+legend("topright", legend = c("Homem", "Mulher"), fil = c("mediumblue", "pink"))
 barplot(prop_por_genero, beside = TRUE, col = c("mediumblue", "pink"), main = "Proporção dos Resultados por Gênero", xlab = "Gênero", ylab = "Proporção", ylim = c(0, 0.7))
 legend("topright", legend = c("Homem", "Mulher"), fil = c("mediumblue", "pink"))
 ```
@@ -144,7 +146,7 @@ legend("topright", legend = c("Homem", "Mulher"), fil = c("mediumblue", "pink"))
 
 A análise bivariada categórica x numérica envolve o estudo da relação entre uma variável categórica (qualitativa) e uma variável numérica (quantitativa). Essa análise busca identificar se a variável numérica varia conforme a categoria da variável categórica, ou seja, se existe uma relação entre elas.
 
-Para o prossegimento do item 4, escolhemos as coluna 'Bolsista' e 'Media das notas do primeiro semestre' para fazer gerar um gráfico boxplot considerando as duas colunas e interpretar os resultados.
+Para o prosseguimento do item 4, escolhemos as coluna 'Bolsista' e 'Media das notas do primeiro semestre' para fazer gerar um gráfico boxplot considerando as duas colunas e interpretar os resultados.
 
 Como justificativa para a escolha de colunas a variável 'Bolsista' foi escolhida por representar uma característica socioeconômica relevante dos estudantes, indicando se recebem ou não algum tipo de apoio financeiro institucional. Já a variável 'Media das notas do primeiro semestre' reflete o desempenho acadêmico inicial do aluno.
 
@@ -155,7 +157,7 @@ quantile(df$Media.das.notas.do.primeiro.semestre)
 faixa_quartis <- cut(df$Media.das.notas.do.primeiro.semestre, breaks = quantile(df$Media.das.notas.do.primeiro.semestre, probs = seq(0, 1, 0.25)), include.lowest = TRUE, labels = c("[0, 11)", "[11, 12.28)", "[12.28, 13.4)", "[13.4, 18.87]"))
 tabela <- table(df$Bolsista, faixa_quartis)
 tabela
-boxplot(Media.das.notas.do.primeiro.semestre ~ Bolsista, data = df, col = c("red", "green"), main = "Desempenho de Bolsistas vs Não Bolsistas", ylab = "Bolsista", xlab = "Média das notas do primeiro semestre", horizontal = TRUE)
+boxplot(Media.das.notas.do.primeiro.semestre ~ Bolsista, data = df, col = c("red", "green"), main = "Desempenho de Bolsistas e Não Bolsistas", ylab = "Bolsista", xlab = "Média das notas do primeiro semestre", horizontal = TRUE)
 ```
 
 ## 5. Matriz de correlação
@@ -172,12 +174,33 @@ matriz_correlacao
 
 A análise bivariada numérica x numérica examina a relação entre duas variáveis quantitativas (numéricas). O objetivo é identificar se existe uma associação entre essas variáveis e, em caso positivo, determinar a força e a direção dessa relação.
 
-Para o prossegimento do item 6, escolhemos as coluna 'Nota de adimissao' e 'Media das notas do primeiro semestre' para fazer gráfico de dispersão, a linha de tendencia dos dados, a correlação entre as duas variáveis e gerar gráfico de dispersão, mostrar a equação da reta ajustada e ocoeficiente de determinação.
+Para o prosseguimento do item 6, escolhemos as coluna 'Nota de adimissao' e 'Media das notas do primeiro semestre' para fazer gráfico de dispersão, a linha de tendencia dos dados, a correlação entre as duas variáveis, mostrar a equação da reta ajustada e ocoeficiente de determinação.
 
 ```{r}
-plot(df$Nota.de.admissao, df$Media.das.notas.do.primeiro.semestre, col = "mediumblue", pch = 19, xlab = "Notas de admissão", ylab = "Média das notas do primeiro período")
+plot(df$Nota.de.admissao, df$Media.das.notas.do.primeiro.semestre, col = "mediumblue", pch = 19, xlab = "Notas de admissão", ylab = "Média das notas do primeiro período", main = "Desempenho no primeiro período em relação a nota de adimissão")
 ml <- lm(df$Media.das.notas.do.primeiro.semestre ~ df$Nota.de.admissao)
 abline(ml, col = "red", lwd = 2)
 ```
 
 
+## 7. Perguntas de estatística bivariada
+
+### 1. Quais fatores mais impactam na desistencia do aluno?
+
+```{r}
+df_q1 <- df[df$Resultado == "Desistente",c("Deslocado", "Necessidades.educacionais.especiais", "Devedor", "Bolsista", "Materias.do.primeiro.semestre.aprovadas")]
+sum(df$Resultado == "Desistente") # Confirmando a quantidade de daodos
+nrow(df_q1)
+```
+
+### 2. Qual a relação entre idade e sucesso na graduação?
+
+```{r}
+boxplot(df$Idade.na.inscricao ~ df$Resultado, horizontal = TRUE, col = c("red", "mediumblue", "green"), xlab = "Idade na inscrição", ylab = "Resuldado", main = "Relação entre idade na incrição e Resultado")
+```
+
+### 3. Alunos que passaram na sua primeira opção de curso, obtém melhores resultados?
+
+```{r}
+boxplot(df$Ordem.de.prioridade.do.curso ~ df$Resultado, horizontal = TRUE)
+```
