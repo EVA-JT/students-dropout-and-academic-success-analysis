@@ -8,34 +8,37 @@ date: "2025-08-03"
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Preparação do script
+## 1. Análise exploratória dos dados
 
-Importar a base de dados usando a função read.csv.
+Uma abordagem para analisar dados que visa entender suas características principais, descobrir padrões, identificar anomalias e verificar hipóteses, antes de aplicar modelos formais de análise ou modelagem.
+
+### Importar a base de dados usando a função read.csv
 
 ```{r}
 setwd("C:\\Users\\davic\\OneDrive\\Documentos\\R\\data")
 #Colocando o caminho para o arquivo
 
-df <- read.csv("data_ADAPTED.csv")
+df <- read.csv("data_ADAPTED.csv", sep = ",", dec = ".", header = TRUE)
 
 ```
  
-Verificar quantidade de linhas e colunas.
+### Verificar quantidade de linhas e colunas
 
 ```{r}
 nrow(df)
 ncol(df)
 ```
 
-Verificar nomes das colunas.
+### Verificar nomes das colunas
 
 ```{r}
 colnames(df)
 ```
 
-Verificar tipo de dados.
+### Verificar tipo de dados
 
 ```{r}
+class(df)
 class(df$Curso)
 class(df$Ordem.de.prioridade.do.curso)
 class(df$Nota.da.qualificacao.anterior)
@@ -52,13 +55,129 @@ class(df$Media.das.notas.do.primeiro.semestre)
 class(df$Resultado)
 ```
 
-Identificar valores ausentes
+### Identificar valores ausentes
 
 ```{r}
 colSums(is.na(df))
 ```
 
 
-## 1. Análise exploratória dos dados
+## 2. Análise de variável numérica contínua
+
+Variáveis numéricas contínuas são variáveis quantitativas que podem assumir qualquer valor dentro de um intervalo específico, incluindo valores fracionários ou decimais.
+Na nossa base de dados temos um total de 3 variáveis numéricas contínuas, são elas: 'Nota da qualificacao anterior', 'Nota de adimissao' e 'Media das notas do primeiro semestre'.
+
+Para o prossegimento do item 2, escolhemos a coluna 'Nota de adimissao' para calcular: valor mínimo e o máximo valor, média, mediana, desvio padrão, os quartis, construir o histograma, boxplot e interpretar os resultados.
+
+### Valores mínimo e máximo
+
+```{r}
+min(df$Nota.de.admissao)
+max(df$Nota.de.admissao)
+```
+
+### Média e mediana
+
+```{r}
+mean(df$Nota.de.admissao)
+median(df$Nota.de.admissao)
+```
+
+
+### Desvio padrão
+```{r}
+sd(df$Nota.de.admissao)
+```
+
+### Quartis
+
+```{r}
+quantile(df$Nota.de.admissao)
+```
+
+### Resumo
+
+```{r}
+summary(df$Nota.de.admissao)
+```
+
+### Histograma
+
+```{r}
+hist(df$Nota.de.admissao, main = "Histograma da nota de adimissão", xlab = "Nota de adimissão", ylab = "Frequência", col = "mediumblue", xlim = c(95, 190), ylim = c(0, 900))
+abline(v = mean(df$Nota.de.admissao), col = "pink", lwd = 2, lty = 2) # Linha que marca a média
+abline(v = median(df$Nota.de.admissao), col = "purple", lwd = 2, lty = 2) # Linha que marca a mediana
+legend("topright", legend = c("Média", "Mediana"), col = c("pink", "purple"), lwd = 2, lty = c(2, 2))
+```
+
+### Boxplot
+
+```{r}
+boxplot(df$Nota.de.admissao, main = "Boxplot da nota de admissão", xlab = "Nota de admissão", ylim = c(90, 200), col = "mediumblue", horizontal = TRUE) 
+```
+
+## 3. Análise bivariada (Categórica x Categórica)
+
+A análise bivariada é um método estatístico que examina a relação entre duas variáveis, buscando determinar se existe uma conexão entre elas e, em caso afirmativo, qual a intensidade e direção dessa relação.
+
+A análise bivariada de variáveis categóricas (categórica x categórica) investiga a relação entre duas variáveis que são do tipo categórico, ou seja, cujos valores representam categorias ou grupos distintos. 
+
+Para o prossegimento do item 3, escolhemos as coluna 'Gênero' e 'Resultado' para fazer uma análise bivariada com duas colunas categóricas escolhidas da base de dados,
+fazer gráficos e interpretar os resultados.
+
+### Tabela de frequencias e por porcentagem de sucesso
+
+```{r}
+tabela <- table(df$Genero, df$Resultado) # relação estre Gênero e Resultado
+tabela
+prop_por_genero <- prop.table(tabela, margin = 1)  # margem 1 = por linha (gênero)
+round(prop_por_genero, 3) # arredonda o valor para 3 casas
+```
+
+### Gráfico
+```{r}
+barplot(prop_por_genero, beside = TRUE, col = c("mediumblue", "pink"), main = "Proporção dos Resultados por Gênero", xlab = "Gênero", ylab = "Proporção", ylim = c(0, 0.7))
+legend("topright", legend = c("Homem", "Mulher"), fil = c("mediumblue", "pink"))
+```
+
+## 4. Análise bivariada (Categórica x Numérica)
+
+A análise bivariada categórica x numérica envolve o estudo da relação entre uma variável categórica (qualitativa) e uma variável numérica (quantitativa). Essa análise busca identificar se a variável numérica varia conforme a categoria da variável categórica, ou seja, se existe uma relação entre elas.
+
+Para o prossegimento do item 4, escolhemos as coluna 'Bolsista' e 'Media das notas do primeiro semestre' para fazer gerar um gráfico boxplot considerando as duas colunas e interpretar os resultados.
+
+Como justificativa para a escolha de colunas a variável 'Bolsista' foi escolhida por representar uma característica socioeconômica relevante dos estudantes, indicando se recebem ou não algum tipo de apoio financeiro institucional. Já a variável 'Media das notas do primeiro semestre' reflete o desempenho acadêmico inicial do aluno.
+
+Ao relacionar essas duas variáveis, buscamos verificar se há diferença significativa no desempenho acadêmico entre bolsistas e não bolsistas. Essa análise pode ajudar a identificar possíveis impactos da concessão de bolsas sobre o rendimento escolar e, consequentemente, contribuir para a avaliação de políticas de assistência estudantil.
+
+```{r}
+quantile(df$Media.das.notas.do.primeiro.semestre)
+faixa_quartis <- cut(df$Media.das.notas.do.primeiro.semestre, breaks = quantile(df$Media.das.notas.do.primeiro.semestre, probs = seq(0, 1, 0.25)), include.lowest = TRUE, labels = c("[0, 11)", "[11, 12.28)", "[12.28, 13.4)", "[13.4, 18.87]"))
+tabela <- table(df$Bolsista, faixa_quartis)
+tabela
+boxplot(Media.das.notas.do.primeiro.semestre ~ Bolsista, data = df, col = c("red", "green"), main = "Desempenho de Bolsistas vs Não Bolsistas", ylab = "Bolsista", xlab = "Média das notas do primeiro semestre", horizontal = TRUE)
+```
+
+## 5. Matriz de correlação
+
+Uma matriz de correlação é uma tabela que exibe os coeficientes de correlação entre múltiplas variáveis. Ela mostra a força e a direção da relação entre cada par de variáveis em um conjunto de dados.
+
+```{r}
+df_numericas <- df[sapply(df, is.numeric)]
+matriz_correlacao <- cor(df_numericas)
+matriz_correlacao
+```
+
+## 6. Análise bivariada (Numérica x Numérica)
+
+A análise bivariada numérica x numérica examina a relação entre duas variáveis quantitativas (numéricas). O objetivo é identificar se existe uma associação entre essas variáveis e, em caso positivo, determinar a força e a direção dessa relação.
+
+Para o prossegimento do item 6, escolhemos as coluna 'Nota de adimissao' e 'Media das notas do primeiro semestre' para fazer gráfico de dispersão, a linha de tendencia dos dados, a correlação entre as duas variáveis e gerar gráfico de dispersão, mostrar a equação da reta ajustada e ocoeficiente de determinação.
+
+```{r}
+plot(df$Nota.de.admissao, df$Media.das.notas.do.primeiro.semestre, col = "mediumblue", pch = 19, xlab = "Notas de admissão", ylab = "Média das notas do primeiro período")
+ml <- lm(df$Media.das.notas.do.primeiro.semestre ~ df$Nota.de.admissao)
+abline(ml, col = "red", lwd = 2)
+```
 
 
