@@ -8,6 +8,10 @@ date: "2025-08-03"
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+## Contexto da base de dados
+
+A base de dados escolhida é criada a partir de uma instituição de ensino superior (adquirido de diversas bases de dados distintas) relacionado a alunos matriculados em diferentes cursos de graduação, como agronomia, design, educação, enfermagem, jornalismo, administração, serviço social e tecnologias. O conjunto de dados inclui informações conhecidas no momento da matrícula do aluno (trajetória acadêmica, dados demográficos e fatores socioeconômicos) e o desempenho acadêmico dos alunos ao final do primeiro e segundo semestres.
+
 ## 1. Análise exploratória dos dados
 
 Uma abordagem para analisar dados que visa entender suas características principais, descobrir padrões, identificar anomalias e verificar hipóteses, antes de aplicar modelos formais de análise ou modelagem.
@@ -187,10 +191,36 @@ abline(ml, col = "red", lwd = 2)
 
 ### 1. Quais fatores mais impactam na desistencia do aluno?
 
+Preparação dos dados
+
 ```{r}
 df_q1 <- df[df$Resultado == "Desistente",c("Deslocado", "Necessidades.educacionais.especiais", "Devedor", "Bolsista", "Materias.do.primeiro.semestre.aprovadas")]
 sum(df$Resultado == "Desistente") # Confirmando a quantidade de daodos
 nrow(df_q1)
+deslocado <- table(df_q1$Deslocado)
+necessidades <- table(df_q1$Necessidades.educacionais.especiais)
+devedor <- table(df_q1$Devedor)
+bolsista <- table(df_q1$Bolsista)
+dados <- rbind(bolsista, devedor, deslocado, necessidades)
+dados
+barplot(dados, col = c("mediumblue", "red", "yellow", "green"), main = "Relação dos dados e resultado na graduação", xlab = "Dados", ylim = c(0, 1600), beside = TRUE)
+legend("topright", legend = c("Bolsistas", "Devedores", "Deslocado", "Necessidades educacionais especiais"), fil = c("mediumblue", "red", "yellow", "green"))
+calc_prop <- function(var_nome) {
+  desistentes_sim <- sum(df_q1[[var_nome]] == "Sim")
+  total_sim <- sum(df[[var_nome]] == "Sim")
+  return(round(desistentes_sim / total_sim, 3))
+}
+
+# Aplicando a função
+prop_bolsista <- calc_prop("Bolsista")
+prop_devedor <- calc_prop("Devedor")
+prop_deslocado <- calc_prop("Deslocado")
+prop_nees <- calc_prop("Necessidades.educacionais.especiais")
+
+# Juntando em uma tabela
+proporcoes <- c(Bolsista = prop_bolsista, Devedor = prop_devedor, Deslocado = prop_deslocado, Necessidades = prop_nees)
+
+barplot(proporcoes, col = "steelblue", ylim = c(0, 1), main = "Proporção de Desistentes em cada Grupo", ylab = "Proporção", las = 1)
 ```
 
 ### 2. Qual a relação entre idade e sucesso na graduação?
@@ -199,8 +229,8 @@ nrow(df_q1)
 boxplot(df$Idade.na.inscricao ~ df$Resultado, horizontal = TRUE, col = c("red", "mediumblue", "green"), xlab = "Idade na inscrição", ylab = "Resuldado", main = "Relação entre idade na incrição e Resultado")
 ```
 
-### 3. Alunos que passaram na sua primeira opção de curso, obtém melhores resultados?
+### 3. Alunos bolsistas obtém melhores resultados?
 
 ```{r}
-boxplot(df$Ordem.de.prioridade.do.curso ~ df$Resultado, horizontal = TRUE)
+boxplot(df$Media.das.notas.do.primeiro.semestre ~ df$Bolsista, horizontal = TRUE, xlab = "Média das matérias do primeiro período", ylab = "Bolsista", col = c("mediumblue", "red"))
 ```
