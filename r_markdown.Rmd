@@ -10,7 +10,9 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Contexto da base de dados
 
-A base de dados escolhida é criada a partir de uma instituição de ensino superior (adquirido de diversas bases de dados distintas) relacionado a alunos matriculados em diferentes cursos de graduação, como agronomia, design, educação, enfermagem, jornalismo, administração, serviço social e tecnologias. O conjunto de dados inclui informações conhecidas no momento da matrícula do aluno (trajetória acadêmica, dados demográficos e fatores socioeconômicos) e o desempenho acadêmico dos alunos ao final do primeiro e segundo semestres.
+A base de dados escolhida é criada a partir de uma instituição de ensino superior (adquirido de diversas bases de dados distintas) relacionado a alunos matriculados em diferentes cursos de graduação, como agronomia, design, educação, enfermagem, jornalismo, administração, serviço social e tecnologias. O conjunto de dados original inclui informações conhecidas no momento da matrícula do aluno (trajetória acadêmica, dados demográficos e fatores socioeconômicos) e o desempenho acadêmico dos alunos ao final do primeiro e segundo semestres.
+
+A base foi alterada para otimizar a eficiência da análise. Foram removidas no total 23 colunas de informações consideradas redundantes ou irrelevantes. Os nomes das colunas restantes, bem como os valores da variável ‘Resultado’, foram traduzidos para o português, colunas que utilizavam codificação numérica para representar categorias (como a coluna ‘Gênero’, que usava 0 e 1) foram convertidas para seus respectivos rótulos descritivos (‘Homem’ e ‘Mulher’), tornando a base mais legível.
 
 ## 1. Análise exploratória dos dados
 
@@ -114,11 +116,19 @@ abline(v = median(df$Nota.de.admissao), col = "purple", lwd = 2, lty = 2) # Linh
 legend("topright", legend = c("Média", "Mediana"), col = c("pink", "purple"), lwd = 2, lty = c(2, 2))
 ```
 
+
+Observamos que o intervalo [125–130] é o que tem a maior frequência de notas e que também inclui a média (126,98) e a mediana (126,1), sugerindo uma distribuição simétrica em torno desse valor.
+
+
 ### Boxplot
 
 ```{r}
 boxplot(df$Nota.de.admissao, main = "Boxplot da nota de admissão", xlab = "Nota de admissão", ylim = c(90, 200), col = "mediumblue", horizontal = TRUE) 
 ```
+
+
+A maioria das notas está concentrada no intervalo [95-160], com algumas poucas notas acima de 160 classificadas como outliers e sem valores extremos. Nota-se também a posição da mediana próxima do centro da caixa, sugerindo que a distribuição de dados é simétrica.
+
 
 ## 3. Análise bivariada (Categórica x Categórica)
 
@@ -142,9 +152,20 @@ round(prop_por_genero, 3) # arredonda o valor para 3 casas
 ```{r}
 barplot(tabela, col = c("mediumblue", "pink"), main = "Relação entre resultado por quantidade de homens e mulheres", xlab = "Gênero", ylab = "Quantidade", ylim = c(0, 2500))
 legend("topright", legend = c("Homem", "Mulher"), fil = c("mediumblue", "pink"))
+```
+
+
+As mulheres correspondem à maior proporção de estudantes matriculados nos cursos analisados.
+
+
+```{r}
 barplot(prop_por_genero, beside = TRUE, col = c("mediumblue", "pink"), main = "Proporção dos Resultados por Gênero", xlab = "Gênero", ylab = "Proporção", ylim = c(0, 0.7))
 legend("topright", legend = c("Homem", "Mulher"), fil = c("mediumblue", "pink"))
 ```
+
+
+Embora haja mais mulheres nos cursos, os homens apresentam um número maior de desistências.
+
 
 ## 4. Análise bivariada (Categórica x Numérica)
 
@@ -163,6 +184,10 @@ tabela <- table(df$Bolsista, faixa_quartis)
 tabela
 boxplot(Media.das.notas.do.primeiro.semestre ~ Bolsista, data = df, col = c("red", "green"), main = "Desempenho de Bolsistas e Não Bolsistas", ylab = "Bolsista", xlab = "Média das notas do primeiro semestre", horizontal = TRUE)
 ```
+
+
+O gráfico indica que os alunos bolsistas tendem a apresentar desempenho acadêmico superior no primeiro período, já que a mediana das suas notas é mais alta em comparação aos não bolsistas.
+
 
 ## 5. Matriz de correlação
 
@@ -187,6 +212,9 @@ abline(ml, col = "red", lwd = 2)
 ```
 
 
+Por mais que haja bastante variação, a linha apresenta uma tendência ascendente, demonstrando uma relação positiva entre a nota de admissão e o desempenho no primeiro período.
+
+
 ## 7. Perguntas de estatística bivariada
 
 ### 1. Quais fatores mais impactam na desistencia do aluno?
@@ -205,6 +233,13 @@ dados <- rbind(bolsista, devedor, deslocado, necessidades)
 dados
 barplot(dados, col = c("mediumblue", "red", "yellow", "green"), main = "Relação dos dados e resultado na graduação", xlab = "Dados", ylim = c(0, 1600), beside = TRUE)
 legend("topright", legend = c("Bolsistas", "Devedores", "Deslocado", "Necessidades educacionais especiais"), fil = c("mediumblue", "red", "yellow", "green"))
+```
+
+
+
+
+
+```{r}
 calc_prop <- function(var_nome) {
   desistentes_sim <- sum(df_q1[[var_nome]] == "Sim")
   total_sim <- sum(df[[var_nome]] == "Sim")
@@ -223,14 +258,24 @@ proporcoes <- c(Bolsista = prop_bolsista, Devedor = prop_devedor, Deslocado = pr
 barplot(proporcoes, col = "steelblue", ylim = c(0, 1), main = "Proporção de Desistentes em cada Grupo", ylab = "Proporção", las = 1)
 ```
 
+
+O gráfico revela que os alunos devedores e aqueles com necessidades especiais apresentam as maiores taxas proporcionais de desistência. Isso sugere que fatores financeiros e de acessibilidade podem estar fortemente associados à evasão escolar. 
+
 ### 2. Qual a relação entre idade e sucesso na graduação?
 
 ```{r}
 boxplot(df$Idade.na.inscricao ~ df$Resultado, horizontal = TRUE, col = c("red", "mediumblue", "green"), xlab = "Idade na inscrição", ylab = "Resuldado", main = "Relação entre idade na incrição e Resultado")
 ```
 
+
+Por meio das medianas o gráfico indica que os alunos que desistem tendem a ser mais velhos enquanto os alunos graduados se encontram na faixa dos 20 anos quando se inscreveram.
+
+
 ### 3. Alunos bolsistas obtém melhores resultados?
 
 ```{r}
 boxplot(df$Media.das.notas.do.primeiro.semestre ~ df$Bolsista, horizontal = TRUE, xlab = "Média das matérias do primeiro período", ylab = "Bolsista", col = c("mediumblue", "red"))
 ```
+
+
+O gráfico indica que os alunos bolsistas tendem a apresentar desempenho acadêmico superior no primeiro período, já que a mediana das suas notas é mais alta em comparação aos não bolsistas.
