@@ -80,21 +80,20 @@ dados <- rbind(bolsista, devedor, deslocado, necessidades)
 dados
 barplot(dados, col = c("mediumblue", "red", "yellow", "green"), main = "Relação dos dados e resultado na graduação", xlab = "Dados", ylim = c(0, 1600), beside = TRUE)
 legend("topright", legend = c("Bolsistas", "Devedores", "Deslocado", "Necessidades educacionais especiais"), fil = c("mediumblue", "red", "yellow", "green"))
+
+
 calc_prop <- function(var_nome) {
   desistentes_sim <- sum(df_q1[[var_nome]] == "Sim")
   total_sim <- sum(df[[var_nome]] == "Sim")
   return(round(desistentes_sim / total_sim, 3))
 }
-
 # Aplicando a função
 prop_bolsista <- calc_prop("Bolsista")
 prop_devedor <- calc_prop("Devedor")
 prop_deslocado <- calc_prop("Deslocado")
 prop_nees <- calc_prop("Necessidades.educacionais.especiais")
-
 # Juntando em uma tabela
 proporcoes <- c(Bolsista = prop_bolsista, Devedor = prop_devedor, Deslocado = prop_deslocado, Necessidades = prop_nees)
-
 barplot(proporcoes, col = "steelblue", ylim = c(0, 1), main = "Proporção de Desistentes em cada Grupo", ylab = "Proporção", las = 1)
 
 boxplot(df$Idade.na.inscricao ~ df$Resultado, horizontal = TRUE, col = c("red", "mediumblue", "green"), xlab = "Idade na inscrição", ylab = "Resuldado", main = "Relação entre idade na incrição e Resultado")

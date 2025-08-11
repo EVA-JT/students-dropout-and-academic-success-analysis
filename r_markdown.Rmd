@@ -1,5 +1,6 @@
 ---
 title: "Atividade AB1.1"
+author: "Davi Celestino dos Santos Barbosa e João Victor Tenório Venancio"
 output: html_document
 date: "2025-08-03"
 ---
@@ -134,8 +135,6 @@ A maioria das notas está concentrada no intervalo [95-160], com algumas poucas 
 
 A análise bivariada é um método estatístico que examina a relação entre duas variáveis, buscando determinar se existe uma conexão entre elas e, em caso afirmativo, qual a intensidade e direção dessa relação.
 
-A análise bivariada de variáveis categóricas (categórica x categórica) investiga a relação entre duas variáveis que são do tipo categórico, ou seja, cujos valores representam categorias ou grupos distintos. 
-
 Para o prossedimento do item 3, escolhemos as coluna 'Gênero' e 'Resultado' para fazer uma análise bivariada com duas colunas categóricas escolhidas da base de dados,
 fazer gráficos e interpretar os resultados.
 
@@ -171,7 +170,7 @@ Embora haja mais mulheres nos cursos, os homens apresentam um número maior de d
 
 A análise bivariada categórica x numérica envolve o estudo da relação entre uma variável categórica (qualitativa) e uma variável numérica (quantitativa). Essa análise busca identificar se a variável numérica varia conforme a categoria da variável categórica, ou seja, se existe uma relação entre elas.
 
-Para o prosseguimento do item 4, escolhemos as coluna 'Bolsista' e 'Media das notas do primeiro semestre' para fazer gerar um gráfico boxplot considerando as duas colunas e interpretar os resultados.
+Para o prosseguimento do item 4, escolhemos as colunas 'Bolsista' e 'Media das notas do primeiro semestre' para fazer gerar um gráfico boxplot considerando as duas e interpretar os resultados.
 
 Como justificativa para a escolha de colunas a variável 'Bolsista' foi escolhida por representar uma característica socioeconômica relevante dos estudantes, indicando se recebem ou não algum tipo de apoio financeiro institucional. Já a variável 'Media das notas do primeiro semestre' reflete o desempenho acadêmico inicial do aluno.
 
@@ -203,7 +202,7 @@ matriz_correlacao
 
 A análise bivariada numérica x numérica examina a relação entre duas variáveis quantitativas (numéricas). O objetivo é identificar se existe uma associação entre essas variáveis e, em caso positivo, determinar a força e a direção dessa relação.
 
-Para o prosseguimento do item 6, escolhemos as coluna 'Nota de adimissao' e 'Media das notas do primeiro semestre' para fazer gráfico de dispersão, a linha de tendencia dos dados, a correlação entre as duas variáveis, mostrar a equação da reta ajustada e ocoeficiente de determinação.
+Para o prosseguimento do item 6, escolhemos as colunas 'Nota de adimissao' e 'Media das notas do primeiro semestre' para fazer gráfico de dispersão, a linha de tendência dos dados, a correlação entre as duas variáveis, mostrar a equação da reta ajustada e o coeficiente de determinação.
 
 ```{r}
 plot(df$Nota.de.admissao, df$Media.das.notas.do.primeiro.semestre, col = "mediumblue", pch = 19, xlab = "Notas de admissão", ylab = "Média das notas do primeiro período", main = "Desempenho no primeiro período em relação a nota de adimissão")
@@ -236,7 +235,7 @@ legend("topright", legend = c("Bolsistas", "Devedores", "Deslocado", "Necessidad
 ```
 
 
-
+Os gráficos mostram o número bruto de desistentes classificados pela presença de um dos quatros fatores ou não. Em questão de números, os alunos que foram deslocados são os que mais desistem.
 
 
 ```{r}
