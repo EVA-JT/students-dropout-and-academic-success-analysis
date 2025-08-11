@@ -68,6 +68,14 @@ matriz_correlacao
 plot(df$Nota.de.admissao, df$Media.das.notas.do.primeiro.semestre, col = "mediumblue", pch = 19, xlab = "Notas de admissão", ylab = "Média das notas do primeiro período", main = "Desempenho no primeiro período em relação a nota de adimissão")
 ml <- lm(df$Media.das.notas.do.primeiro.semestre ~ df$Nota.de.admissao)
 abline(ml, col = "red", lwd = 2)
+ml <- lm(Media.das.notas.do.primeiro.semestre ~ Nota.de.admissao, data = df)
+coeficientes <- coef(ml)
+r <- cor(df$Nota.de.admissao, df$Media.das.notas.do.primeiro.semestre)
+cat("Coeficiente de correlação linear: ", round(r, 4), "\n")
+a <- round(coeficientes[2], 4)  # Inclinação
+b <- round(coeficientes[1], 4)  # Intercepto
+cat("Equação da reta: Média das notas do primeiro semestre =", a, "* Nota de admissão +", b, "\n")
+
 
 df_q1 <- df[df$Resultado == "Desistente",c("Deslocado", "Necessidades.educacionais.especiais", "Devedor", "Bolsista", "Materias.do.primeiro.semestre.aprovadas")]
 sum(df$Resultado == "Desistente") # Confirmando a quantidade de daodos
